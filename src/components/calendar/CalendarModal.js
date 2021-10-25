@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
+import Swal from 'sweetalert2';
 
 const customStyles = {
     content: {
@@ -22,6 +23,7 @@ export default function CalendarModal() {
 
     const [dateStart, setDateStart] = useState(now.toDate());
     const [dateEnd, setDateEnd] = useState(end.toDate());
+    const [titleValid, setTitleValid] = useState(true);
 
     const [formValues, setFormValues] = useState({
         title: 'Evento',
@@ -30,7 +32,7 @@ export default function CalendarModal() {
         end: end.toDate()
     });
 
-    const { notes, title } = formValues
+    const { notes, title, start, end: endDate } = formValues
 
     const handleInputchange = ({target}) => {
         setFormValues({
@@ -40,7 +42,7 @@ export default function CalendarModal() {
     }
 
     const closeModal= () => {
-        console.log('Cerrando');
+        //TODO cerrar modal
     }
     
     const handleStartDateChange= (e) => {
@@ -61,6 +63,21 @@ export default function CalendarModal() {
 
     const handleSubmitForm = (e)=>{
         e.preventDefault();
+
+        const momentStart = moment( start );
+        const momentEnd = moment( endDate );
+
+        if(momentStart.isSameOrAfter( momentEnd )){
+            return Swal.fire('Error', 'La fecha fin debe ser mayor a la fecha de inicio', 'error');
+        }
+
+        if(title.trim().length < 2){
+            return setTitleValid(false);
+        }
+        //TODO Guardar informacion
+
+        setTitleValid(true);
+        closeModal();
     }
 
     return (
@@ -76,7 +93,7 @@ export default function CalendarModal() {
         >
             <h1> Nuevo evento </h1>
             <hr />
-                <form className="container" onSubmit= {handleSubmitForm}>
+                <form className="container" onSubmit={handleSubmitForm}>
 
                     <div className="form-group">
                         <label>Fecha y hora inicio</label>
@@ -101,7 +118,7 @@ export default function CalendarModal() {
                         <label>Titulo y notas</label>
                         <input 
                             type="text" 
-                            className="form-control"
+                            className={`form-control ${!titleValid && 'is-invalid'}`}
                             placeholder="Título del evento"
                             name="title"
                             autoComplete="off"
