@@ -44,7 +44,7 @@ const updateEvents = async(req, res = response ) => {
         const event = await Event.findById( eventId );
 
         if( !event ){
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg: 'Evento no existe'
             });
@@ -77,12 +77,43 @@ const updateEvents = async(req, res = response ) => {
         });
     }
 }
-const deleteEvents = (req, res = response ) => {
+const deleteEvents = async(req, res = response ) => {
 
-    res.json({
-        ok:true,
-        msg: 'deleteEvents'
-    });
+    const eventId = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        // Verificar si Id existe en BD
+        const event = await Event.findById( eventId );
+
+        if( !event ){
+            return res.status(404).json({
+                ok: false,
+                msg: 'Evento no existe'
+            });
+        }
+
+        // Verificar si es el mismo usuario que guardo para eliminar
+        if( event.user.toString() !== uid ){
+            return res.status(401).json({
+                ok: false,
+                msg: 'No tiene permiso para eliminar'
+            });
+        }
+
+        await Event.findByIdAndDelete( eventId );
+        res.status(200).json({
+            ok: true
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
 }
 
 module.exports={
