@@ -3,23 +3,31 @@ const { Schema, model } = require('mongoose');
 const EventSchema = Schema({
     title:{
         type: String,
-        require: true
+        required: true
     },
     notes:{
         type: String
     },
     start:{
         type: Date,
-        require: true
+        required: true
     },
     end:{
         type: Date,
-        require: true
+        required: true
     },
     user:{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     }
 });
+
+// Cambiar el _id por id solo para fin ilustrativo
+EventSchema.method('toJSON', function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+})
 
 module.exports = model('Event', EventSchema);
