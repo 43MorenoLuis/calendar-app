@@ -33,12 +33,49 @@ const createEvents = async(req, res = response ) => {
         });
     }
 }
-const updateEvents = (req, res = response ) => {
+const updateEvents = async(req, res = response ) => {
 
-    res.json({
-        ok:true,
-        msg: 'updateEvents'
-    });
+    const eventId = req.params.id;
+    const uid = req.uid;
+
+    try {
+        
+        // Verificar si Id existe en BD
+        const event = await Event.findById( eventId );
+
+        if( !event ){
+            res.status(404).json({
+                ok: false,
+                msg: 'Evento no existe'
+            });
+        }
+
+        // Verificar si es el mismo usuario que guardo para modificar
+        if( event.user.toString() !== uid ){
+            return res.status(401).json({
+                ok: false,
+                msg: 'No tiene permiso para editarlo'
+            });
+        }
+
+        const newEvent = {
+            ...req.body,
+            user: uid
+        }
+
+        const eventUpdate = await Event.findByIdAndUpdate( eventId, newEvent, { new: true } );
+        res.status(200).json({
+            ok: true,
+            event: eventUpdate
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
 }
 const deleteEvents = (req, res = response ) => {
 
