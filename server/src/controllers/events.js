@@ -9,6 +9,7 @@ const getEvents = (req, res = response ) => {
 }
 const createEvents = (req, res = response ) => {
 
+    // Verificar quye tenga el evento
     res.json({
         ok:true,
         msg: 'createEvents'
