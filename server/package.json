@@ -1,14 +1,18 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "MERN calendar-app",
   "main": "index.js",
+  "repository": {
+    "url": "https://github.com/43MorenoLuis/calendar-app/tree/main/server",
+    "type": "git"
+  },
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "43LuisMoreno",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
