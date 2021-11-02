@@ -22,7 +22,6 @@ const localizer = momentLocalizer(moment);
 
 export const CalendarScreen = () => {
 
-    
     const dispatch = useDispatch();
     const { events, activeEvent } = useSelector( state => state.calendar );
     const { uid } = useSelector( state => state.auth );
@@ -34,7 +33,6 @@ export const CalendarScreen = () => {
     }, [dispatch])
 
     const onDoubleClick = (e) => {
-        // console.log(e);
         dispatch( uiOpenModal() );
     }
 
@@ -52,7 +50,6 @@ export const CalendarScreen = () => {
         dispatch( eventClearActiveEvent() );
     }
 
-
     const eventStyleGetter = ( event, start, end, isSelected ) => {
         
         const style = {
@@ -63,7 +60,6 @@ export const CalendarScreen = () => {
             color: 'white'
         }
 
-
         return {
             style
         }
@@ -72,8 +68,6 @@ export const CalendarScreen = () => {
     return (
         <div className="calendar-screen">
             <Navbar />
-            
-
             <Calendar
                 localizer={ localizer }
                 events={ events }
@@ -92,20 +86,12 @@ export const CalendarScreen = () => {
                 }}
             />
 
-
-
             <AddNewFab />
-
-
             {
                 (activeEvent) && <DeleteEventFab />
             }
-            
-
+    
             <CalendarModal />
-
-
-
         </div>
     )
 }
