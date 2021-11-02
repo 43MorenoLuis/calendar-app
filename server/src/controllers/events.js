@@ -20,7 +20,7 @@ const createEvents = async(req, res = response ) => {
 
         const eventSave = await event.save();
 
-        res.status(500).json({
+        res.json({
             ok: true,
             event: eventSave
         });
